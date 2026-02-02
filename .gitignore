@@ -1,0 +1,8 @@
+.python-version
+__pycache__
+figures
+final_figures
+figures_actor_exploration
+figures_exploration
+scrapCodes
+generate_creative_figures.py

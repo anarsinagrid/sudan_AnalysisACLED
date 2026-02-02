@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What Changed in Sudan After April 2023?</title>
+
+    <!-- Existing CSS – DO NOT CHANGE -->
+    <link rel="stylesheet" href="story.css">
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+
+<body>
+
+    <!-- TITLE -->
+    <div class="text">
+        <h1>What Changed in Sudan After April 2023?</h1>
+        <p class="subtitle">
+            A Data-Driven Look at How Violence Escalated, Spread, and Persisted
+        </p>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- CORE QUESTION -->
+    <div class="text">
+        <h2>The Core Question</h2>
+        <p>
+            Sudan has lived with political violence for years. Protests, unrest, and civilian harm were already part of
+            daily life.
+        </p>
+        <p>
+            So what actually changed on April 15, 2023?
+        </p>
+        <p>
+            The data does not suggest a clean break from peace to chaos. Instead, it shows a structural transformation
+            in how violence is expressed.
+        </p>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- F1: STRUCTURAL BREAK -->
+    <div class="text">
+        <h2>Fatalities After April 15</h2>
+        <p>
+            The most obvious effect of the war was an increase in fatalities. This was not a spike or a singular event.
+            After April 15, fatalities rose sharply and stayed at a new, much higher level.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-f1">
+        <div class="plotly-figure" id="fig-f1-plot"></div>
+        <div class="caption">
+            Fatalities surge after April 15, 2023 and remain far above pre-war levels.
+        </div>
+    </div>
+
+    <div class="text">
+        <p>
+            The timeline reveals distinct phases. In early 2024, there is a visible drop in reported fatalities and
+            violent events.
+            This period reflects a strategic stalemate after the Rapid Support Forces (RSF) captured Gezira State in
+            late 2023.
+        </p>
+        <p>
+            During this time, the primary drivers of mortality shifted from direct combat to starvation and disease.
+            Famine conditions took hold, particularly in Darfur, producing what can be described as "silent deaths."
+        </p>
+        <p>
+            By late 2024, violence escalated again. The RSF launched an all-out siege on El Fasher in North Darfur,
+            while the Sudanese Armed Forces (SAF) initiated major offensives in Khartoum and Gezira to recapture
+            territory.
+        </p>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- F2: EVENT COMPOSITION -->
+    <div class="text">
+        <h2>How Violence Changed Form</h2>
+        <p>
+            The second obvious effect of the war was a reordering of event types and the persistence of civilian harm.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-f2">
+        <div class="plotly-figure" id="fig-f2-plot"></div>
+        <div class="caption">
+            A shift from protests to battles and strategic violence, while violence against civilians remains
+            persistent.
+        </div>
+    </div>
+
+    <div class="text">
+        <p>
+            Before April 2023, protests were a prominent feature of Sudan’s political landscape.
+            After the war began, protests declined sharply and were replaced by battles and strategic military
+            operations.
+        </p>
+        <p>
+            Violence against civilians, however, remained a consistent feature of the conflict,
+            accounting for roughly one-fifth of events both before and after the war began.
+        </p>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- ACTORS -->
+    <div class="text">
+        <h2>The Main Actors of the War</h2>
+        <p>
+            The war is primarily shaped by two armed actors whose approaches to violence differ markedly.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-ax04">
+        <div class="plotly-figure" id="fig-ax04-plot"></div>
+        <div class="caption">
+            RSF events are more strongly associated with violence against civilians, while SAF events are more
+            battle-heavy.
+        </div>
+    </div>
+
+    <div class="text">
+        <p>
+            The Rapid Support Forces (RSF) operate as a paramilitary organization with a decentralized structure,
+            while the Sudanese Armed Forces (SAF) function as a conventional state military.
+            These structural differences are reflected in how each actor appears in the data.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-ax06">
+        <div class="plotly-figure" id="fig-ax06-plot"></div>
+        <div class="caption">
+            Protest activity collapses on April 15 as armed actor activity surges.
+        </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- GEOGRAPHY -->
+    <div class="text">
+        <h2>Is the Violence Everywhere — or Concentrated?</h2>
+        <p>
+            The war is national in consequence but localized in intensity.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-f6">
+        <div class="plotly-figure" id="fig-f6-plot"></div>
+        <div class="caption">
+            A small number of regions account for the majority of documented violence.
+        </div>
+    </div>
+
+    <div class="figure full" id="fig-f14">
+        <div class="plotly-figure" id="fig-f14-plot"></div>
+        <div class="caption">
+            An interactive timelapse showing how high-precision events spread and persist over time.
+            Use play/pause and the slider to explore different phases of the war.
+        </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- REPORTING -->
+    <div class="text">
+        <h2>How the War Is Reported</h2>
+        <p>
+            The intensity of the war also changed how violence was documented.
+        </p>
+    </div>
+
+    <div class="figure full" id="fig-f9">
+        <div class="plotly-figure" id="fig-f9-plot"></div>
+        <div class="caption">
+            After April 2023, reporting relies more heavily on local partners and new media sources.
+        </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- CONCLUSION -->
+    <div class="text">
+        <h2>What the Data Shows</h2>
+        <p>
+            April 15, 2023 marks the moment Sudan’s political violence reorganized into sustained armed conflict.
+        </p>
+        <p>
+            The war did not eliminate civilian harm or protest overnight, but it fundamentally changed
+            who was fighting, where violence concentrated, and how conflict unfolded over time.
+        </p>
+    </div>
+
+    <footer>
+        <p>Analysis based on ACLED data. Visualizations built with Plotly.</p>
+    </footer>
+
+    <script src="load_figures.js"></script>
+
+</body>
+
+</html>
