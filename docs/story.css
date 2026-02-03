@@ -3,9 +3,26 @@
     --ink: #1a1a1a;
     --muted: #6b7280;
     --rule: #e5e7eb;
-    --figure-bg: #fafafa;
+    --figure-bg: transparent;
     --accent: #2563eb;
+    --scroll-progress: 0;
+    --act-bg: var(--bg);
+    --plotly-warm: #fbf7f0;
+
+    /* Act background colors (very subtle) */
+    --bg-hope: #f1e0c6;
+    --bg-tension: #e0e9f7;
+    --bg-rupture: #ead3c4;
+    --bg-aftermath: #dde7d8;
 }
+
+@supports (color: color-mix(in srgb, #fff 50%, #000 50%)) {
+    :root {
+        --plotly-warm: color-mix(in srgb, #ffffff 88%, var(--act-bg) 12%);
+    }
+}
+
+/* ---------------- RESET ---------------- */
 
 * {
     margin: 0;
@@ -20,24 +37,157 @@ html {
 body {
     background: var(--bg);
     color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.7;
     font-size: 18px;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 1.2s ease;
 }
 
-/* Text Container - Constrained Width */
+/* Top scroll progress indicator (subtle, editorial) */
+body::before {
+    content: "";
+    display: none;
+}
+
+/* Left timeline with jump markers */
+.timeline {
+    position: fixed;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 70vh;
+    width: 66px;
+    display: block;
+    padding: 6px 0;
+    z-index: 9000;
+    pointer-events: none;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    width: 2px;
+    background: rgba(26, 26, 26, 0.18);
+    border-radius: 999px;
+}
+
+.timeline::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    width: 2px;
+    background: rgba(26, 26, 26, 0.55);
+    border-radius: 999px;
+    transform-origin: top;
+    transform: scaleY(var(--scroll-progress, 0));
+    transition: transform 0.1s linear;
+}
+
+.timeline__dot {
+    position: absolute;
+    left: 18px;
+    top: calc(var(--pos, 0) * 100%);
+    transform: translateY(-50%);
+    font-size: 1.02rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: rgba(26, 26, 26, 0.55);
+    font-weight: 700;
+    padding: 5px 12px 5px 14px;
+    border-radius: 999px;
+    z-index: 1;
+    pointer-events: auto;
+    transition: color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.timeline__dot:hover {
+    color: rgba(26, 26, 26, 0.82);
+    background: rgba(26, 26, 26, 0.06);
+}
+
+.timeline__dot.is-active {
+    color: rgba(26, 26, 26, 0.85);
+    transform: translateY(-50%) scale(1.03);
+}
+
+.timeline__dot:focus-visible {
+    outline: 2px solid rgba(26, 26, 26, 0.55);
+    outline-offset: 3px;
+}
+
+.timeline__dot--minor {
+    display: none;
+}
+
+.timeline__dot--sub {
+    left: 34px;
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    padding: 2px 6px;
+    color: rgba(26, 26, 26, 0.45);
+    font-weight: 600;
+}
+
+.timeline__dot--sub:hover,
+.timeline__dot--sub:focus-visible {
+    color: rgba(26, 26, 26, 0.72);
+}
+
+/* ---------------- TEXT CONTAINER ---------------- */
+
+.act {
+    padding: 2rem 0;
+}
+
+.act[data-act="hope"] {
+    padding-top: 1.5rem;
+}
+
+.act[data-act="rupture"] {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.act[data-act="rupture"] .text {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.act[data-act="rupture"] .figure.full {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.act[data-act="rupture"] h2 {
+    margin: 1.2rem 0 0.8rem;
+}
+
+.act[data-act="rupture"] p {
+    margin-bottom: 1rem;
+}
+
 .text {
     max-width: 760px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.5rem;
 }
 
-/* Typography */
+/* ---------------- TYPOGRAPHY ---------------- */
+
 h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
     margin-bottom: 1rem;
     letter-spacing: -0.02em;
 }
@@ -45,139 +195,240 @@ h1 {
 h2 {
     font-size: 1.75rem;
     font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
     line-height: 1.3;
+    margin: 2rem 0 1.25rem;
     letter-spacing: -0.01em;
 }
 
-h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    line-height: 1.4;
+p {
+    max-width: 65ch;
+    margin-bottom: 1.4rem;
 }
 
-p {
-    margin-bottom: 1.5rem;
-    max-width: 65ch;
-}
+/* Subtitle */
 
 .subtitle {
     font-size: 1.25rem;
     color: var(--muted);
-    margin-bottom: 3rem;
-    font-weight: 400;
     line-height: 1.5;
+    margin-top: 0.5rem;
+    margin-bottom: 2.25rem;
 }
 
-/* Section Divider */
+/* ---------------- ACT LABELS ---------------- */
+
+.act-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+/* ---------------- SECTION DIVIDERS ---------------- */
+
 .section-rule {
     max-width: 760px;
-    margin: 4rem auto;
+    margin: 2rem auto;
     height: 1px;
     background: var(--rule);
-    border: none;
 }
 
-/* ===== FIGURE CONTAINER ===== */
+.section-rule.soft {
+    margin: 1.25rem auto;
+    opacity: 0.7;
+}
+
+.act .section-rule {
+    display: none;
+}
+
+/* Reduce the gap between the title block and ACT I */
+body>.section-rule:first-of-type {
+    margin: 1.25rem auto;
+}
+
+/* ---------------- FIGURES ---------------- */
 
 .figure.full {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 
-    background: var(--figure-bg);
+    background: transparent;
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    /* tighter padding so container hugs figure */
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+
+    /* scroll emphasis base state */
+    opacity: 0.78;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-/* ===== PLOTLY FIGURE BASE ===== */
+.figure.full.is-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Plotly container */
 
 .plotly-figure {
     width: 100%;
-    max-width: var(--fig-max-width, 900px);
-
-    /* critical: prevent cropping */
+    max-width: 900px;
     height: auto;
-    aspect-ratio: var(--fig-aspect, 16 / 9);
-
-    display: block;
+    aspect-ratio: 16 / 9;
 }
 
-/* ===== PER-FIGURE OVERRIDES ===== */
-
-/* standard charts */
-#fig-fatalities-structural-break {
-    --fig-max-width: 900px;
-    --fig-aspect: 16 / 9;
+/* Charts only — keep transparent */
+.figure.full:not(#fig-f6):not(#fig-f14) .plotly-figure .plot-container,
+.figure.full:not(#fig-f6):not(#fig-f14) .plotly-figure .svg-container,
+.figure.full:not(#fig-f6):not(#fig-f14) .plotly-figure .main-svg {
+    background: transparent !important;
 }
 
-#fig-event-composition {
-    --fig-max-width: 900px;
-    --fig-aspect: 16 / 9;
+/* Only for non-map charts */
+.figure.full:not(#fig-f6):not(#fig-f14) .plotly-figure .main-svg rect.bg {
+    fill: transparent !important;
 }
 
-/* timelines */
-#fig-actor-timelines {
-    --fig-max-width: 900px;
-    --fig-aspect: 16 / 10;
+/* Gently warm only the map figures so they sit better on tinted acts */
+#fig-f6 .plotly-figure .plot-container,
+#fig-f14 .plotly-figure .plot-container,
+#fig-f6 .plotly-figure canvas,
+#fig-f14 .plotly-figure canvas {
+    background: var(--plotly-warm) !important;
 }
 
-/* MAPS — key fix */
-#fig-choropleth,
-#fig-timelapse {
-    --fig-max-width: 750px;
-    --fig-aspect: 4 / 3;
+#fig-f6 .plotly-figure,
+#fig-f14 .plotly-figure {
+    filter: sepia(0.12) saturate(0.92) brightness(0.98) contrast(0.98);
+    aspect-ratio: auto;
+    height: 600px;
 }
 
-/* behavioral DNA */
-#fig-behavioral-dna {
-    --fig-max-width: 700px;
-    --fig-aspect: 5 / 4;
+/* Timelapse controls emphasis */
+#fig-f14 .plotly-figure .gupdatemenus .button rect {
+    fill: rgba(255, 250, 240, 0.95) !important;
+    stroke: #b45309 !important;
+    stroke-width: 1.4px;
+    rx: 6px;
+    ry: 6px;
 }
 
-/* ===== CAPTIONS ===== */
+#fig-f14 .plotly-figure .gupdatemenus .button text {
+    fill: #8b3700 !important;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+#fig-f14 .plotly-figure .gupdatemenus .button:hover rect,
+#fig-f14 .plotly-figure .gupdatemenus .button:focus rect {
+    fill: #ffe8c7 !important;
+    stroke: #8b3700 !important;
+}
+
+#fig-f14 .plotly-figure .gupdatemenus {
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+    animation: pulse-hint 1.6s ease-in-out 2;
+}
+
+@keyframes pulse-hint {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+}
+
+/* ---------------- CAPTIONS ---------------- */
 
 .caption {
-    max-width: 760px;
+    max-width: 720px;
     margin-top: 1.25rem;
     font-size: 0.85rem;
     color: var(--muted);
     font-style: italic;
+    text-align: center;
+    line-height: 1.5;
 }
 
-
-/* Accent Text */
-.accent {
-    color: var(--accent);
-    font-weight: 600;
+.figure-explainer {
+    margin-top: 0.65rem;
+    padding: 0.65rem 0.9rem;
+    background: rgba(26, 26, 26, 0.03);
+    border-left: 3px solid rgba(26, 26, 26, 0.14);
+    border-radius: 6px;
+    font-size: 0.83rem;
+    color: rgba(26, 26, 26, 0.76);
+    text-align: left;
+    font-style: normal;
 }
 
-/* Footer */
+/* legend interaction hint */
+.legend-hint {
+    display: block;
+    margin-top: 0.35rem;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.legend-hint::before {
+    content: "↳ ";
+}
+
+/* ---------------- FOOTER ---------------- */
+
 footer {
     max-width: 760px;
-    margin: 6rem auto 3rem;
+    margin: 3rem auto 2rem;
     padding: 0 1.5rem;
     font-size: 0.85rem;
     color: var(--muted);
 }
 
-/* Responsive Design */
+/* ---------------- RESPONSIVE ---------------- */
+
 @media (max-width: 768px) {
     body {
         font-size: 16px;
     }
 
+    .act {
+        padding: 1.5rem 0;
+    }
+
+    .act[data-act="hope"] {
+        padding-top: 1rem;
+    }
+
+    .act[data-act="rupture"] {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .act[data-act="rupture"] .text {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
     .text {
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 1.25rem;
     }
 
     h1 {
@@ -188,26 +439,28 @@ footer {
         font-size: 1.5rem;
     }
 
-    h3 {
-        font-size: 1.125rem;
-    }
-
     .figure.full {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-        padding: 1rem;
+        padding: 1rem 0.75rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
     }
 
     .caption {
-        padding: 0 1rem 1.5rem 1rem;
+        padding: 0 1rem;
+    }
+
+    .timeline {
+        left: 8px;
+        height: 64vh;
+        transform: translateY(-50%) scale(0.92);
     }
 }
 
+/* ---------------- PRINT ---------------- */
 
-/* Print Styles */
 @media print {
-    html {
-        scroll-snap-type: none;
+    body::before {
+        display: none;
     }
 
     .figure.full {

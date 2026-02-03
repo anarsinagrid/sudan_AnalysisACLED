@@ -1,0 +1,10 @@
+pandas
+numpy
+matplotlib
+seaborn
+geopandas
+contextily
+plotly
+idna
+requests
+urbanogram

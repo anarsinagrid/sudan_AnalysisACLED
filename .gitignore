@@ -6,3 +6,5 @@ figures_actor_exploration
 figures_exploration
 scrapCodes
 generate_creative_figures.py
+.DS_Store
+docs/.DS_Store
