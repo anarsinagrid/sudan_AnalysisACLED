@@ -10,10 +10,10 @@
     --plotly-warm: #fbf7f0;
 
     /* Act background colors (very subtle) */
-    --bg-hope: #f1e0c6;
-    --bg-tension: #e0e9f7;
-    --bg-rupture: #ead3c4;
-    --bg-aftermath: #dde7d8;
+    --bg-hope: #e2eef7;
+    --bg-tension: #efd4b3;
+    --bg-rupture: #e1ab7b;
+    --bg-aftermath: #d7e6df;
 }
 
 @supports (color: color-mix(in srgb, #fff 50%, #000 50%)) {
@@ -213,6 +213,78 @@ p {
     line-height: 1.5;
     margin-top: 0.5rem;
     margin-bottom: 2.25rem;
+}
+
+/* Intro guiding questions */
+.intro-questions {
+    margin-top: 1.25rem;
+    padding: 1rem 1.1rem;
+    background: rgba(255, 255, 255, 0.46);
+    border: 1px solid rgba(26, 26, 26, 0.14);
+    border-left: 4px solid rgba(26, 26, 26, 0.38);
+    border-radius: 12px;
+}
+
+.intro-questions__kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(26, 26, 26, 0.68);
+    margin-bottom: 0.65rem;
+    font-weight: 650;
+}
+
+.intro-questions__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: q;
+}
+
+.intro-questions__list li {
+    margin: 0.55rem 0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: rgba(26, 26, 26, 0.88);
+    counter-increment: q;
+}
+
+.intro-questions__list li::before {
+    content: "Q" counter(q);
+    display: inline-block;
+    width: 1.9rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: rgba(26, 26, 26, 0.52);
+    transform: translateY(-0.04rem);
+}
+
+.intro-questions__meta {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: rgba(26, 26, 26, 0.72);
+}
+
+.figure-button {
+    display: inline-block;
+    margin-top: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    background: rgba(26, 26, 26, 0.08);
+    color: #1a1a1a;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid rgba(26, 26, 26, 0.14);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.figure-button:hover,
+.figure-button:focus-visible {
+    background: rgba(26, 26, 26, 0.14);
+    transform: translateY(-1px);
 }
 
 /* ---------------- ACT LABELS ---------------- */

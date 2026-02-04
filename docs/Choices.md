@@ -1,109 +1,124 @@
-# Storytelling & Design Decisions
+# The Cutting Room Floor: Editorial & Analytical Choices
 
-This document explains the "why" behind the narrative structure, visual design, and data handling choices in the Sudan Conflict Analysis report. It is intended for designers, developers, and analysts who want to understand the editorial direction of the project.
+> "These figures didn't choose themselves. Every chart you saw was picked from a pile of discarded experiments."
 
-## 1. Narrative Arc: The 5-Act Structure
+This document tracks the messy reality behind the final report. It details the hypotheses we tested, the visualizations we built, and the specific reasons we killed them—even the ones that looked good.
 
-Instead of a standard dashboard that presents all data at once, we chose a **linear, scrollytelling narrative**. This forces the reader to experience the conflict's evolution chronologically and thematically.
-
-- **ACT I: Hope (Pre-War Context)**
-  - *Goal*: Establish the baseline of civic engagement.
-  - *Data*: Focus on protest events.
-  - *Key Takeaway*: Sudan was not a vacuum; there was an active, organized civil society.
-
-- **ACT II: Tension (The Build-up)**
-  - *Goal*: Show the encroachment of violence upon civic space.
-  - *Data*: Rise in armed actor presence vs. civilian demonstrations.
-  - *Key Takeaway*: The war didn't just "happen"; it was a visible accumulation of power.
-
-- **ACT III: Rupture (April 15, 2023)**
-  - *Goal*: accurate visualization of the structural break.
-  - *Data*: Fatalities spike (F1) and event composition shift (F2).
-  - *Key Takeaway*: April 15 was a system shock that fundamentally altered the country's daily reality.
-
-- **Event Composition (The "New Normal")**
-  - *Goal*: Explain *how* the violence changed.
-  - *Data*: Shift from "Protests" to "Battles" and "Violence Against Civilians".
-  - *Key Takeaway*: Political expression was violently replaced by military logic.
-
-- **ACT V: Aftermath**
-  - *Goal*: Leave the reader with the lingering reality of the conflict.
-  - *Data*: Persistence of violence despite "quiet" periods (stalemates).
-
-## 2. Design Philosophy
-
-### Minimalist Aesthetic
-We stripped away standard chart clutter (grids, heavy borders, default titles) to focus on the data lines themselves. The heavy use of whitespace mirrors the "silence" often associated with unreported conflicts.
-
-### Color Semantics
-We eschewed standard categorical colors for a strictly semantic palette:
-- **Forest Green (`#228B22`)**: **SAF** (Sudanese Armed Forces) - Represents the "official" military, grounded but rigid.
-- **Goldenrod (`#DAA520`)**: **RSF** (Rapid Support Forces) - Represents the paramilitary nature, distinct from the state but highly visible.
-- **Steel Blue (`#4682B4`)**: **Protesters** - Represents civic movement, distinct from the armed actors.
-- **Grey**: Pre-war or neutral context.
-- **Firebrick (`#B22222`)**: War-period intensity.
-
-### Interactive "Scrollytelling"
-The report uses `IntersectionOrder` in JavaScript to trigger animations only when the reader arrives at a specific section. This pacing ensures the reader processes one insight before moving to the next.
-
-## 3. Data Decisions
-
-### Structural Break Point: April 15, 2023
-While tension existed before, statistical tests (Chow Test) confirmed Apr 15 as the structural break. We treat this date as a "hard border" in all visualizations.
-
-### Actor Normalization
-ACLED data contains many variations of actor names. We aggregated them into three primary buckets for clarity:
-1. **SAF**: Includes "Military Forces of Sudan (2019-)", "Government of Sudan", etc.
-2. **RSF**: Includes "Rapid Support Forces", "Military Forces of Sudan (2019-2023) Rapid Support Forces".
-3. **Protesters**: Includes all civilian demonstration groups.
-
-### Handling "Quiet" Periods
-The analysis intentionally highlights the "stalemate" periods (e.g., early 2024). We annotated these in Figure 1 to prevent the misinterpretation that "fewer reported battles = peace." Instead, we labeled it "Shift to Silent War" to reflect the transition to siege warfare and starvation, which show up less in event data but are equally lethal.
-
-## 4. The Editorial Layer: What We Explored But Chose Not to Show
-
-The final report represents a curated selection from a much broader exploratory analysis. This section documents the visualizations and analyses that were tested but ultimately excluded—not due to lack of rigor, but because they either didn't serve the narrative or risked overwhelming the reader.
-
-### Sexual Violence Analysis
-**What we explored**: Event-level analysis of sexual violence incidents, including temporal patterns and geographic clustering.
-
-**Why we excluded it**: 
-- **Under-reporting bias**: Sexual violence is notoriously under-documented in conflict zones. Showing raw counts would misrepresent the true scale.
-- **Ethical concerns**: Reducing sexual violence to "just another data point" without proper context felt reductive and potentially harmful.
-- **Narrative fit**: The story focuses on structural shifts in violence, not specific atrocity types that require deeper qualitative context.
-
-### Reporting Bias & Source Density
-**What we explored**: Analysis of how media coverage shifted during the war, including source density maps and temporal reporting gaps.
-
-**Why we simplified it**: 
-- **Too meta**: A full reporting bias correction model would require explaining the methodology before the reader even sees the main story.
-- **Audience accessibility**: The general audience doesn't need to know about ACLED's data collection process to understand the conflict's impact.
-- **Compromise**: We kept a simplified version (Figure 9: Source Coverage Shift) that shows the change without diving into correction models.
-
-### Complex Spatial Models
-**What we explored**: DBSCAN clustering to identify "hotspot zones" and spatial autocorrelation tests (Moran's I) to detect conflict diffusion patterns.
-
-**Why we used choropleths instead**: 
-- **Interpretability**: Density-based clusters are hard to explain to non-technical audiences ("What does epsilon mean?").
-- **Visual clarity**: Standard admin-level choropleths are immediately recognizable and don't require statistical training to interpret.
-- **Actionability**: Policymakers and journalists are more familiar with state-level aggregations than algorithmically-defined zones.
-
-### Actor Network Graphs
-**What we explored**: Network visualizations showing interactions between 50+ armed groups, militias, and state actors.
-
-**Why we focused on SAF vs RSF instead**: 
-- **Visual overload**: Network graphs with dozens of nodes become unreadable "hairballs."
-- **Narrative clarity**: The conflict is fundamentally a two-sided war. Showing every minor militia would obscure this core dynamic.
-- **Behavioral DNA approach**: The diverging bar chart (AX_04) more clearly shows *how* SAF and RSF differ in their tactics than a network graph ever could.
-
-### Temporal Aggregation Experiments
-**What we explored**: Weekly, bi-weekly, and quarterly aggregations to test sensitivity to time windows.
-
-**Why we standardized on monthly**: 
-- **Noise reduction**: Weekly data was too volatile; quarterly data smoothed out important mid-term shifts.
-- **Consistency**: Monthly aggregation is standard in conflict analysis literature, making our work comparable to other studies.
-- **Visual rhythm**: Monthly bins create a readable timeline without excessive compression or expansion.
+For the raw code that generated these experiments, see the `scrapCodes/` directory (kept locally but not shipped to prod). Each subsection below notes the scripts we leaned on, so the path from hypothesis → code → figure stays auditable.
 
 ---
 
-**Key Takeaway**: The final visualizations were not the first or only options explored. They were chosen because they best balanced **analytical rigor**, **narrative clarity**, and **audience accessibility**. Every exclusion was a deliberate editorial choice, not an oversight.
+## 1. The Original Plan: "The War Week"
+
+**Hypothesis**: We initially planned a three-part structure:
+1. Pre-war (The baseline)
+2. **The War Week (April 15-22)**: A microscopic look at the 7 days that broke the country.
+3. Post-war (The new reality)
+
+**Supporting explorations**: rapid aggregation notebooks in `scrapCodes/temporal_aggregation.py` and `scrapCodes/event_timelapse.py` produced small-multiple week slices (not retained here because the counts were too low to be reliable).
+
+**Why we killed it**:
+- **Small N Problem**: When we zoomed into just 7 days, the event count was statistically too low to support robust generalizations.
+- **Reporting Lag**: Analyzing the data showed that the "fog of war" in that first week meant many events were back-filled later or reported with lower precision.
+- **Conclusion**: A "micro-history" required granular qualitative data (interviews, ground reports) that purely event-based data couldn't sustain without creating misleading certainty.
+
+---
+
+## 2. Geography: The Density Trap
+
+**What we tried**: We wanted to show the hardest-hit regions immediately. We generated `F4_admin1_event_concentration.png` to rank states by total violence.
+
+![Admin1 Concentration](supporting_images/F4_admin1_event_concentration.png)
+
+**Why we killed it**:
+- **False Precision**: Admin1 (State) boundaries are arbitrary in a fluid conflict. Ranking states implied that the *entire* state was dangerous, whereas violence was often hyper-localized to specific cities or roads.
+- **The Solution**: We switched to the **Choropleth Map (Figure 6)** in the final report. It uses time-decay and specific event locations to show *where* violence lives, rather than just tallying it up on a leaderboard.
+
+---
+
+## 3. The Sexual Violence Narrative
+
+**What we explored**: A dedicated section analyzing trends in violence against women.
+
+**Why we dropped it**:
+- **Data Quality**: Sexual violence is systematically under-reported in conflict event data. Analysis of the raw logs showed too many gaps and inconsistent attributes.
+- **Ethical Risk**: Presenting a chart based on incomplete data risks minimizing the phenomenon. If the data captures 5% of incidents, a "flat line" looks like stability when it's actually a reporting failure.
+- **Decision**: Better to speak to it in the text or rely on specialized qualitative reports (referenced in the intro) than to present a potentially misleading quantitative chart.
+
+---
+
+## 4. Defining "The Actors" (or: Who is fighting?)
+
+**The Problem**: The raw data is a mess of naming conventions. We had "Military Forces of Sudan," "SAF," "Government of Sudan," "RSF," "Janjaweed," "Militias," etc.
+
+**Attempt 1: The Raw Distribution**
+We visualized the raw actor counts (`AX_01_actor_overall_distribution.png`).
+
+![Actor Distribution](supporting_images/AX_01_actor_overall_distribution.png)
+
+**Critique**: It's a "hairball." The long tail of small militias obscures the main structural conflict.
+**The Fix**: We implemented a rigorous **Actor Normalization** pipeline in the code, bucketing these dozens of names into: `SAF`, `RSF`, `Protest Groups`, and `Other Armed Groups`.
+
+**Attempt 2: Behavioral Heatmaps**
+Once normalized, we tried to find their "fingerprints" using heatmaps.
+- **By Disorder Type** (`AX_03`):
+![Disorder Type](supporting_images/AX_03_actor_by_disorder_type.png)
+
+- **By Event Type** (`AX_04`):
+![Event Type](supporting_images/AX_04_actor_by_event_type.png)
+
+**The Insight**: These heatmaps confirmed our hypothesis—SAF and RSF behave differently. SAF correlates with "Explosions/Remote Violence" (Battles), while RSF correlates strongly with "Violence against civilians."
+**The Result**: This analysis justified the **"Behavioral DNA" Diverging Bar Chart (AX_04)** in the final report, which is much cleaner than these heatmaps but rests on their findings.
+
+---
+
+## 5. Visualizing Composition Change
+
+**What we tried**: To show the shift from "Protest" to "War," we built a **Slopegraph** (`F21_composition_slopegraph.png`).
+
+![Slopegraph](supporting_images/F21_composition_slopegraph.png)
+
+**Why we killed it**:
+- **Too abstract**: Slopegraphs are great for analysts but require too much cognitive load for a general audience.
+- **Hidden Volume**: It shows the *rank* change but hides the massive *volume* change.
+- **The Solution**: We used **Stacked Density Plots (Figure 2)**. They show the *collapse* of protest volume and the *surge* of battle volume simultaneously, which is the emotional and structural truth of the story.
+
+---
+
+## 6. The Hidden Precision
+
+One thing not shown in the charts but meticulous in the code: **Geo-Precision filtering**.
+- We didn't just map every point.
+- In the data cleaning pipeline, we filtered based on ACLED's `geo_precision` code.
+- Events with low precision (regional level only) were treated differently than town-level precision to prevent "dot scattering" in empty deserts.
+- This doesn't show up as a "figure," but it's the reason the map doesn't look like a uniform spray of noise.
+
+---
+
+## 7. Breadcrumbs to the Workbench
+
+- **Code paths**: Explorations live in `scrapCodes/` (e.g., `exploratory_visuals.py`, `event_timelapse_decay.py`, `admin1_mapping.py`, `sexual_violence.py`). These are kept local to avoid shipping unfinished ideas.
+- **Artifacts**: All exploratory images referenced here are now gathered in `docs/supporting_images/` for a single place to review discarded options without touching the live report.
+- **Data boundaries**: All decisions above were made on the ACLED-derived dataset with events ranging from 2019-04-15 to 2025-01-23. Anything beyond that date would require a rerun of the pipeline and a refresh of this choices log.
+
+---
+
+## 8. The Eclipse Bubbles That Didn't Land
+
+**What it was**: `C4_eclipse_bubbles.png` — a circular/bubble concept that tried to dramatize simultaneous collapses and surges.
+
+![Eclipse Bubbles](supporting_images/C4_eclipse_bubbles.png)
+
+**Why we loved it**:
+- Visually striking; the idea was to show overlapping pressures in a single, cinematic frame.
+
+**Why it didn't ship**:
+- **Fit**: It drew focus to the aesthetic rather than the argument; readers got lost in the form before reaching the takeaway.
+- **Comparability**: Bubble sizing made it hard to compare categories over time without a legend lecture.
+- **Narrative friction**: Every time we slotted it in, it interrupted pacing instead of propelling it.
+
+**Decision**: Parked. Kept here as a reminder that visual novelty can still lose to clarity.
+
+---
+
+*This document serves as the audit trail for the "Choice" to prioritize narrative clarity over data volume.*
