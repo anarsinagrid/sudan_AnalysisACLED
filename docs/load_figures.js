@@ -3,7 +3,7 @@
  * Loads Plotly figures from JSON and renders them inline
  */
 
-async function loadFigure(divId, jsonPath, customConfig = {}) {
+async function loadFigure(divId, jsonPath, customConfig = {}, options = {}) {
     try {
         const res = await fetch(jsonPath);
         if (!res.ok) {
@@ -21,6 +21,50 @@ async function loadFigure(divId, jsonPath, customConfig = {}) {
         if (fig.frames && fig.frames.length > 0) {
             await Plotly.newPlot(divId, fig.data, fig.layout, config);
             await Plotly.addFrames(divId, fig.frames);
+            if (options.autoPlay) {
+                const gd = document.getElementById(divId);
+                const frameDuration = options.frameDuration ?? 500;
+                const totalDuration = (frameDuration * fig.frames.length) + 100;
+
+                const animateOnce = () => Plotly.animate(
+                    divId,
+                    null,
+                    {
+                        frame: { duration: frameDuration, redraw: true },
+                        transition: { duration: 0 },
+                        mode: 'immediate',
+                        fromcurrent: false
+                    }
+                );
+
+                const scheduleLoop = () => {
+                    if (!options.loop || !gd) return;
+                    if (gd.__autoLoopTimer) clearTimeout(gd.__autoLoopTimer);
+                    gd.__autoLoopTimer = setTimeout(function tick() {
+                        if (gd.__autoLoopPaused) return;
+                        animateOnce();
+                        gd.__autoLoopTimer = setTimeout(tick, totalDuration);
+                    }, totalDuration);
+                };
+
+                if (gd) {
+                    gd.__autoLoopPaused = false;
+                    gd.on?.('plotly_buttonclicked', (event) => {
+                        const label = event?.button?.label || '';
+                        if (label.includes('Pause')) {
+                            gd.__autoLoopPaused = true;
+                            if (gd.__autoLoopTimer) clearTimeout(gd.__autoLoopTimer);
+                        } else if (label.includes('Play')) {
+                            gd.__autoLoopPaused = false;
+                            animateOnce();
+                            scheduleLoop();
+                        }
+                    });
+                }
+
+                animateOnce();
+                scheduleLoop();
+            }
         } else {
             Plotly.newPlot(divId, fig.data, fig.layout, config);
         }
@@ -45,9 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
         scrollZoom: false
     });
 
-    loadFigure('fig-f14-plot', 'interactive_figures/F14_event_timelapse_high_precision_decay.json', {
-        scrollZoom: false
-    });
+    loadFigure(
+        'fig-f14-plot',
+        'interactive_figures/F14_event_timelapse_high_precision_decay.json',
+        { scrollZoom: false },
+        { autoPlay: true, loop: true, frameDuration: 500 }
+    );
 
     /* -------- Act Background Transitions -------- */
 
@@ -125,6 +172,19 @@ document.addEventListener('DOMContentLoaded', function () {
     );
 
     actSections.forEach(section => actObserver.observe(section));
+
+    const footerSentinel = document.querySelector('#footer-sentinel');
+    if (footerSentinel) {
+        const footerObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    document.body.classList.toggle('show-footer', entry.isIntersecting);
+                });
+            },
+            { threshold: 0 }
+        );
+        footerObserver.observe(footerSentinel);
+    }
 
     /* -------- Scroll Progress -------- */
 
