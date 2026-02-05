@@ -3,6 +3,9 @@
 
 This project analyzes the ACLED (Armed Conflict Location & Event Data) dataset to visualize how the conflict in Sudan fundamentally changed after the outbreak of war on April 15, 2023. It produces a data-driven narrative that moves beyond simple event counts to show shifts in lethality, actor behavior, and the collapse of civic space.
 
+**🔴 Live Report:** [https://anarsinagrid.github.io/sudan_AnalysisACLED/](https://anarsinagrid.github.io/sudan_AnalysisACLED/)  
+**📄 Editorial Choices:** [docs/Choices.md](https://github.com/anarsinagrid/sudan_AnalysisACLED/blob/main/docs/Choices.md)
+
 ## 📂 Project Structure
 
 The project follows a linear data pipeline from raw ingestion to final web report.
@@ -44,7 +47,7 @@ To reproduce the analysis and report results, follow these steps in order:
 If you are pulling fresh ACLED exports or using a Colab-based ingestion workflow, use the ingestion script below.
 
 ```bash
-python data_ingestion(Colab).py
+data_ingestion(Colab).py
 ```
 
 ### 1. Data Cleaning
@@ -105,7 +108,7 @@ A key next step is to ingest ACLED data for South Sudan to perform a comparative
 
 ### Enhanced Visualization & Reporting
 - **Drill-down Capabilities**: Upgrade the report to allow users to filter the `F14` timelapse by specific regions (e.g., "Show only Darfur" vs "Show Khartoum").
-- **3D Topography Maps**: Implement the "Heat-Sink" 3D concept (explored in `scrapCodes/`) to better visualize the *intensity* of violence accumulation in urban centers.
+- **3D Topography Maps**: Implement the "Heat-Sink" 3D concept to better visualize the *intensity* of violence accumulation in urban centers.
 - **Narrative Branching**: Allow readers to toggle between a "Civilian Impact" view (filtering for violence against civilians) and a "Military Tactics" view (filtering for battles/strategic explosions).
 - **Richer Frontend Framework**: With more time, migrate the report to a component-based frontend (e.g., SvelteKit) to enable reusable chart modules, stateful filters, and smoother narrative transitions.
 

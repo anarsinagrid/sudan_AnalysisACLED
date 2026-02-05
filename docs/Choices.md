@@ -1,10 +1,13 @@
 # The Cutting Room Floor: Editorial & Analytical Choices
 
+**🔴 Live Report:** [https://anarsinagrid.github.io/sudan_AnalysisACLED/](https://anarsinagrid.github.io/sudan_AnalysisACLED/)  
+**🛠 Project Setup (README):** [Main Repository](https://github.com/anarsinagrid/sudan_AnalysisACLED/blob/main/README.md)
+
 > "These figures didn't choose themselves. Every chart you saw was picked from a pile of discarded experiments."
 
 This document tracks the messy reality behind the final report. It details the hypotheses I tested, the visualizations I built, and the specific reasons I killed them—even the ones that looked good.
 
-For the raw code that generated these experiments, see the `scrapCodes/` directory (kept locally but not shipped to prod). Each subsection below notes the scripts I leaned on, so the path from hypothesis → code → figure stays auditable.
+Some exploratory trials were run locally and are not part of the production repository. Each subsection below notes the hypothesis → outcome and why it was dropped.
 
 ---
 
@@ -15,7 +18,7 @@ For the raw code that generated these experiments, see the `scrapCodes/` directo
 2. **The War Week (April 15-22)**: A microscopic look at the 7 days that broke the country.
 3. Post-war (The new reality)
 
-**Supporting explorations**: rapid aggregation notebooks in `scrapCodes/temporal_aggregation.py` and `scrapCodes/event_timelapse.py` produced small-multiple week slices (not retained here because the counts were too low to be reliable).
+**Supporting explorations**: rapid aggregation trials produced small-multiple week slices (not retained here because the counts were too low to be reliable).
 
 **Why I killed it**:
 - **Small N Problem**: When I zoomed into just 7 days, the event count was statistically too low to support robust generalizations.
@@ -99,8 +102,7 @@ One thing not shown in the charts but meticulous in the code: **Geo-Precision fi
 
 ## 7. Breadcrumbs to the Workbench
 
-- **Code paths**: Explorations live in `scrapCodes/` (e.g., `exploratory_visuals.py`, `event_timelapse_decay.py`, `admin1_mapping.py`, `sexual_violence.py`). These are kept local to avoid shipping unfinished ideas.
-- **Artifacts**: All exploratory images referenced here are now gathered in `docs/supporting_images/` for a single place to review discarded options without touching the live report.
+- **Local trials (not in prod)**: Some rejected explorations were run locally and are not shipped in the production repo.
 - **Data boundaries**: All decisions above were made on the ACLED-derived dataset with events ranging from 2019-04-15 to 2025-01-23. Anything beyond that date would require a rerun of the pipeline and a refresh of this choices log.
 
 ---
